@@ -1,10 +1,10 @@
 # Pre-Alert
 
-Pre-Alert is an advanced early warning system designed to notify users **before** traditional sirens are triggered during rocket attacks. By analyzing real-time movements of planes, the app detects abnormal, simultaneous deviations from their flight paths - changes that typically occur due to aviation regulations enacted at the onset of an attack.
+Pre-Alert is an advanced early warning system designed to notify users **before** traditional sirens are triggered during rocket attacks in Israel. By analyzing real-time movements of planes, the app detects abnormal, simultaneous deviations from their flight paths - changes that typically occur due to regulations enacted at the onset of an attack.
 
 ## Concept
 
-When a rocket attack is imminent, aviation authorities enforce strict regulations causing planes in the affected region to change course, land, or hold patterns. These coordinated maneuvers often precede public warning sirens.
+When a rocket attack is imminent, aviation authorities enforce strict regulations causing planes in the affected region to change course, land, or hold patterns. These coordinated maneuvers often precede public warning sirens and alerts, especially when we're dealing with a long-range threat such as a ballistic missile.
 
 Pre-Alert leverages this critical window by:
 
