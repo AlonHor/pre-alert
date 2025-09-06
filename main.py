@@ -53,6 +53,8 @@ while True:
         longs = [p[1] for p in heatmap]
         alts = [p[2] for p in heatmap]
 
+        ax.set_xlabel("long")
+        ax.set_ylabel("lat")
         heatmap_scatter = ax.scatter(longs, lats, alts, c='b', marker='o', label='Heatmap', alpha=0.05)
 
         with open("current.json") as f:
