@@ -18,7 +18,8 @@ Here's 1 hour of traffic, in a 60x timelapse:
 
 ## Simple Mobile App Vision
 
-Pre-Alert's goal is to offer a **very simple mobile app**:  
+Pre-Alert's goal is to offer a **very simple mobile app**:
+
 - You install the app and enable notifications.
 - When an attack is detected, you'll receive a notification on your phone.
 - The data processing and detection runs in the cloud, keeping the app lightweight and fully automatic for end users.
@@ -44,6 +45,14 @@ Pre-Alert is **actively working and near completion**. It already performs the f
 - [ ] Create a simple mobile app with push notification support.
 - [ ] Deploy detection backend to a cloud environment.
 - [ ] Add support for configurable alert rules and thresholds.
+
+## How To Run
+
+Running the backend detection system cannot be simpler:
+
+1. Download the npm packages by running `npm i` or `yarn`.
+2. Run the "feeder" by running `node main.js`.
+3. Run the python script for detection and visualization by running `python main.py`.
 
 ## Contributing
 
