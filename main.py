@@ -10,6 +10,10 @@ GREEN = "\033[32m"
 
 plt.ion()
 fig = plt.figure()
+try:
+    fig.canvas.manager.set_window_title('Pre-Alert Radar') # type: ignore
+except Exception:
+    pass
 ax = fig.add_subplot(111, projection='3d')
 
 heatmap_scatter = None
