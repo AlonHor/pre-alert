@@ -48,16 +48,12 @@ Pre-Alert is **actively working and near completion**. It already performs the f
 
 ## How To Run
 
-Running the backend detection system cannot be simpler:
-
-1. Download the npm packages by running `npm i` or `yarn`.
-2. Run the "feeder" by running `node main.js`.
-3. Run the python script for detection and visualization by running `python main.py`.
+In order to run the backend detection system you must have a program running to populate `current.json` with live aircraft positions. This can be done using official APIs (e.g. "FlightRadar24" or "ADSBx"). Once you do, simply run the python script by running `python main.py`.
 
 ## Contributing
 
-All feedback, ideas, and contributions are welcome! Please open an issue or pull request if you'd like to help! :)
+All feedback, ideas, and contributions are welcome! Please open an issue or pull request if you'd like to help! ❤️
 
 ---
 
-**Disclaimer:** Pre-Alert is experimental and should not be relied upon as the sole source of information for personal safety. Always follow official guidance and warning systems.
+⚠️ **Disclaimer:** Pre-Alert is <u>experimental</u> and should **NOT** be relied upon as the sole source of information for personal safety. Always follow official guidance and warning systems, i.e. Home Front Command (Pikud HaOref).
