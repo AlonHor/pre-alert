@@ -1,6 +1,6 @@
 # Pre-Alert
 
-Pre-Alert is an advanced early warning system designed to notify users **before** traditional sirens are triggered during rocket attacks in Israel. By analyzing real-time movements of planes, the app detects abnormal, simultaneous deviations from their flight paths - changes that typically occur due to regulations enacted at the onset of an attack.
+Pre-Alert is an advanced early warning system designed to notify users **before** traditional sirens are triggered during rocket attacks in Israel. By analyzing real-time movements of planes, the app detects abnormal, simultaneous deviations from their flight paths - changes that typically occur due to regulations enacted at the onset of an attack. As of now, the system runs as a Python script, but I'm looking forward to rewriting it in either Rust, C or C++ in the near future!
 
 ## Concept
 
