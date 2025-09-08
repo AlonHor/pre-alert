@@ -3,10 +3,13 @@ import matplotlib.pyplot as plt
 import winsound
 import numpy as np
 import threading
+import numpy.typing as npt
 
 RESET = "\033[0m"
 RED = "\033[31m"
 GREEN = "\033[32m"
+ORANGE = "\033[33m"
+GRAY = "\033[90m"
 
 plt.ion()
 fig = plt.figure()
@@ -16,98 +19,125 @@ except Exception:
     pass
 ax = fig.add_subplot(111, projection='3d')
 
+ax.set_xlabel("lon")
+ax.set_ylabel("lat")
+ax.set_zlabel("alt") # type: ignore
+ax.set_xlim(34.181249, 35.52949)
+ax.set_ylim(31.874889, 32.502673)
+ax.set_zlim(0, 8000) # type: ignore
+ax.view_init(elev=90, azim=-90) # type: ignore
+plt.tight_layout()
+plt.bar
+
 heatmap_scatter = None
 current_planes_scatter = None
 close_points_scatter = None
 isolated_planes_scatter = None
 
-heatmap = []
-current_planes = []
+heatmap: npt.NDArray[np.float64] = np.array([])
+current_planes: npt.NDArray[np.float64] = np.array([])
 close_points = []
 isolated_planes = []
 
-def is_isolated(point, reference_points):
+def is_isolated(point: npt.NDArray[np.float64], reference_points_np: npt.NDArray[np.float64]):
     lat1, lon1, alt1 = point
-    min_distance = 100000
-    close_points_count = 0
-    for lat2, lon2, alt2 in reference_points:
-        dlat = (lat1 - lat2) * 111000
-        dlon = (lon1 - lon2) * 111000 * np.cos(np.radians((lat1 + lat2) / 2))
-        dalt = (alt1 - alt2) * 4
-        distance = np.sqrt(dlat**2 + dlon**2 + dalt**2)
-        if distance < min_distance:
-            min_distance = distance
-        if distance <= 2000: #2500
-            close_points.append([lat2, lon2, alt2])
-            close_points_count += 1
 
-    isolated = close_points_count < 10
-    print(f"{RED if isolated else GREEN}{close_points_count} {RESET}", end="")
+    lat2 = reference_points_np[:, 0]
+    lon2 = reference_points_np[:, 1]
+    alt2 = reference_points_np[:, 2]
+
+    dlat = (lat1 - lat2) * 111_000
+    dlon = (lon1 - lon2) * 111_000 * np.cos(np.radians((lat1 + lat2) / 2))
+    dalt = (alt1 - alt2) * 0.3048 * 12
+
+    distances = np.sqrt(dlat**2 + dlon**2 + dalt**2)
+
+    close_mask = distances <= 2000
+    close_count = np.count_nonzero(close_mask)
+
+    close_points.extend(reference_points_np[close_mask].tolist())
+
+    isolated = close_count < 10
+    print(f"{RED if isolated else GREEN}{close_count} {RESET}", end="")
     return isolated
 
 while True:
-    try:
-        with open("heatmap.json") as f:
-            heatmap = json.load(f)
+    with open("heatmap.json") as f:
+        try:
+            heatmap = np.array(json.load(f))
+        except: continue
 
-        if heatmap_scatter:
+    if heatmap_scatter:
+        try:
             heatmap_scatter.remove()
+        except: pass
 
-        lats = [p[0] for p in heatmap]
-        longs = [p[1] for p in heatmap]
-        alts = [p[2] for p in heatmap]
+    with open("current.json") as f:
+        try:
+            current_planes = np.array(json.load(f))
+        except: continue
 
-        ax.set_xlabel("long")
-        ax.set_ylabel("lat")
-        heatmap_scatter = ax.scatter(longs, lats, alts, c='b', marker='o', label='Heatmap', alpha=0.05)
-
-        with open("current.json") as f:
-            current_planes = json.load(f)
-
-        if current_planes_scatter:
+    if current_planes_scatter:
+        try:
             current_planes_scatter.remove()
+        except: pass
 
-        if close_points_scatter:
+    if close_points_scatter:
+        try:
             close_points_scatter.remove()
+        except: pass
 
-        if isolated_planes_scatter:
+    if isolated_planes_scatter:
+        try:
             isolated_planes_scatter.remove()
+        except: pass
 
-        close_points = []
-        isolated_planes = []
+    close_points = []
+    isolated_planes = []
 
-        print("amount of points in 2km rad per plane: ", end="")
+    print("Points in 2km radius per plane: ", end="")
 
-        isolated_count = 0
-        for plane in current_planes:
-            if is_isolated(plane, heatmap):
-                current_planes.remove(plane)
-                isolated_planes.append(plane)
-                isolated_count += 1
+    isolated_count = 0
+    for plane in current_planes:
+        if is_isolated(plane, heatmap):
+            current_plane_mask = ~(current_planes == plane).all(axis=1)
+            current_planes = current_planes[current_plane_mask]
+            isolated_planes.append(plane)
+            isolated_count += 1
 
-        if isolated_count > 2:
-            threading.Thread(target=lambda: winsound.Beep(1200, 2000), daemon=True).start()
+    if isolated_count > 2:
+        threading.Thread(target=lambda: winsound.Beep(1200, 2000), daemon=True).start()
 
-        print(f"\nisolated: {RED if isolated_count > 0 else GREEN}{isolated_count}{RESET}\n")
+    print(f"{ORANGE if isolated_count == 1 else RED if isolated_count > 0 else GREEN}{isolated_count}{RESET}{GRAY}/{len(current_planes) + isolated_count}{RESET}")
 
-        current_planes_lats = [p[0] for p in current_planes]
-        current_planes_longs = [p[1] for p in current_planes]
-        current_planes_alts = [p[2] for p in current_planes]
+    heatmap_lats = heatmap[:, 0]
+    heatmap_lons = heatmap[:, 1]
+    heatmap_alts = heatmap[:, 2]
 
-        close_points_lats = [p[0] for p in close_points]
-        close_points_longs = [p[1] for p in close_points]
-        close_points_alts = [p[2] for p in close_points]
+    if len(current_planes) > 0:
+        current_planes_lats = current_planes[:, 0]
+        current_planes_lons = current_planes[:, 1]
+        current_planes_alts = current_planes[:, 2]
+    else:
+        current_planes_lats = []
+        current_planes_lons = []
+        current_planes_alts = []
 
-        isolated_planes_lats = [p[0] for p in isolated_planes]
-        isolated_planes_longs = [p[1] for p in isolated_planes]
-        isolated_planes_alts = [p[2] for p in isolated_planes]
+    close_points_lats =  [p[0] for p in close_points]
+    close_points_lons = [p[1] for p in close_points]
+    close_points_alts = [p[2] for p in close_points]
 
-        current_planes_scatter = ax.scatter(current_planes_longs, current_planes_lats, current_planes_alts, c='g', marker='o', label='Updated Points', edgecolors='k', linewidths=1.0, s=80, alpha=1) # type: ignore
-        isolated_planes_scatter = ax.scatter(isolated_planes_longs, isolated_planes_lats, isolated_planes_alts, c='r', marker='o', label='Isolated Planes', edgecolors='k', linewidths=1.0, s=80, alpha=1) # type: ignore
-        close_points_scatter = ax.scatter(close_points_longs, close_points_lats, close_points_alts, c='y', marker='o', label='Close Points', edgecolors='k', linewidths=1.0, s=30, alpha=0.5) # type: ignore
-        plt.draw()
+    isolated_planes_lats = [p[0] for p in isolated_planes]
+    isolated_planes_lons = [p[1] for p in isolated_planes]
+    isolated_planes_alts = [p[2] for p in isolated_planes]
 
-    except Exception as e:
-        print("Error:", e)
+    heatmap_scatter = ax.scatter(heatmap_lons, heatmap_lats, heatmap_alts, c='b', marker='o', label='Heatmap', edgecolors='none', s=10, alpha=0.05) # type: ignore
+    current_planes_scatter = ax.scatter(current_planes_lons, current_planes_lats, current_planes_alts, c='g', marker='o', label='Current Planes', edgecolors='k', linewidths=1.0, s=80, alpha=1) # type: ignore
+    isolated_planes_scatter = ax.scatter(isolated_planes_lons, isolated_planes_lats, isolated_planes_alts, c='r', marker='o', label='Isolated Planes', edgecolors='k', linewidths=1.0, s=80, alpha=1) # type: ignore
+    close_points_scatter = ax.scatter(close_points_lons, close_points_lats, close_points_alts, c='purple', marker='o', label='Close Points', edgecolors='none', linewidths=1.0, s=30, alpha=0.05) # type: ignore
+    plt.draw()
+
+    # except Exception as e:
+    #     print("Error:", e)
 
     plt.pause(1)
