@@ -1,2 +1,5 @@
 node_modules
 heatmap_bu.json
+main.js
+package-lock.json
+package.json
