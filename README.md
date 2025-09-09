@@ -15,7 +15,7 @@ Pre-Alert leverages this critical window by:
 - **Detecting Anomalies:** Identifying clusters of planes that abruptly leave their routes in synchronization, suggesting regulatory action.
 - **Early Notification:** Providing alerts when multiple planes become isolated or deviate in patterns indicative of imminent attack protocols, potentially ahead of official warnings and sirens.
 
-Here's 1 hour of traffic, in a 60x timelapse:
+Here's 1 hour of traffic, in a 60x timelapse (GIF may take a while to load):
 
 ![radar-timelapse](https://github.com/user-attachments/assets/13da5ff2-b598-4685-8fd3-1fb5f8dcb3e6)
 
