@@ -61,7 +61,7 @@ def is_isolated(point: npt.NDArray[np.float64], reference_points_np: npt.NDArray
 
     close_points.extend(reference_points_np[close_mask].tolist())
 
-    isolated = close_count <= 20
+    isolated = close_count < 10
     close_points_sum += close_count
     print(f"{RED if isolated else GREEN}{close_count} {RESET}", end="")
     return isolated
