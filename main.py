@@ -59,7 +59,7 @@ def is_isolated(point: npt.NDArray[np.float64], reference_points_np: npt.NDArray
 
     close_points.extend(reference_points_np[close_mask].tolist())
 
-    isolated = close_count < 10
+    isolated = close_count <= 20
     close_points_sum += close_count
     print(f"{RED if isolated else GREEN}{close_count} {RESET}", end="")
     return isolated
@@ -99,8 +99,6 @@ while True:
     isolated_planes = []
     close_points_sum = 0
 
-    print("Points in 2km radius per plane: ", end="")
-
     isolated_count = 0
     for plane in current_planes:
         if is_isolated(plane, heatmap):
@@ -111,18 +109,21 @@ while True:
 
     plane_count = len(current_planes) + isolated_count
 
-    print(f"{ORANGE if isolated_count == 1 else RED if isolated_count > 0 else GREEN}{isolated_count}{RESET}{GRAY}/{plane_count}{RESET} A:", end="")
+    print(f"{ORANGE if isolated_count == 1 else RED if isolated_count > 0 else GREEN}{isolated_count}{RESET}{GRAY}/{plane_count}{RESET} A: ", end="")
 
+    close_points_avg = -1
     if plane_count > 0:
         close_points_avg = int(close_points_sum / plane_count)
-        print(f"{GREEN if close_points_avg > 50 else RED}{close_points_avg}{RESET}")
+        print(f"{GREEN if close_points_avg > 50 else RED}{close_points_avg}{RESET} ", end="")
         ax.set_title(f"{close_points_avg}/100")
     else:
-        print(f"{GREEN}N/A{RESET}")
+        print(f"{GREEN}0{RESET} ", end="")
         ax.set_title("N/A")
 
-    if close_points_avg != 0 and close_points_avg <= 50:
+    if close_points_avg != -1 and close_points_avg <= 50 and isolated_count > 1:
         threading.Thread(target=lambda: winsound.Beep(1200, 2000), daemon=True).start()
+        print(f"{RED}ATTK{RESET}")
+    print()
 
     heatmap_lats = heatmap[:, 0]
     heatmap_lons = heatmap[:, 1]
@@ -149,9 +150,6 @@ while True:
     current_planes_scatter = ax.scatter(current_planes_lons, current_planes_lats, current_planes_alts, c='g', marker='o', label='Current Planes', edgecolors='k', linewidths=1.0, s=80, alpha=1) # type: ignore
     isolated_planes_scatter = ax.scatter(isolated_planes_lons, isolated_planes_lats, isolated_planes_alts, c='r', marker='o', label='Isolated Planes', edgecolors='k', linewidths=1.0, s=80, alpha=1) # type: ignore
     close_points_scatter = ax.scatter(close_points_lons, close_points_lats, close_points_alts, c='purple', marker='o', label='Close Points', edgecolors='none', linewidths=1.0, s=30, alpha=0.05) # type: ignore
+
     plt.draw()
-
-    # except Exception as e:
-    #     print("Error:", e)
-
     plt.pause(1)
