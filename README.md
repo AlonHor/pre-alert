@@ -15,8 +15,44 @@ Pre-Alert leverages this critical window by:
 - **Detecting Anomalies:** Identifying clusters of planes that abruptly leave their routes in synchronization, suggesting regulatory action.
 - **Early Notification:** Providing alerts when multiple planes become isolated or deviate in patterns indicative of imminent attack protocols, potentially ahead of official warnings and sirens.
 
-Here's 1 hour of traffic, in a 60x timelapse:<br /><br />
+Here's 1 hour of traffic, in a 60x timelapse:
+
 ![radar-timelapse](https://github.com/user-attachments/assets/13da5ff2-b598-4685-8fd3-1fb5f8dcb3e6)
+
+## Working Proof
+While leaving the detection system running on the background in my room, I suddenly started hearing **BEEP**, **BEEP**, **BEEP**, **BEEP**... I rushed to my room to see if it actually detected an oncoming attack, and, well, 2 minutes later, I got a notification on my phone from Home Front Command notifying about an oncoming ballistic missile.
+
+### Here are the logs of the actual event - worth having a look!:
+
+Format is as follows, where pr = path rating, i.e. how "on-path" the plane is (0-100), according to the heatmap: 
+```
+<plane 1 pr> <plane 2 pr> <plane 3 pr>(...) <isolated planes>/<total planes> A:<average pr>
+```
+
+<details>
+  <summary><b>[IMG]</b> Before the attack, everything seemed fine:</summary>
+  <img width="179" height="150" alt="image" src="https://github.com/user-attachments/assets/2d7f30df-fd0a-4f7f-8def-75461d7f00fa" />
+</details>
+
+<details>
+  <summary><b>[IMG]</b> Right when the attack began, the system quickly detected the planes beginning their evacuation patterns. Numbers going down are simply planes doing <i>something</i> they don't normally do:</summary>
+  <img width="126" height="372" alt="image" src="https://github.com/user-attachments/assets/450df071-65e3-4df7-9cf2-bb7256938275" />
+</details>
+
+<details>
+  <summary><b>[IMG]</b> The numbers kept going down, while another plane joined in, evacuating too:</summary>
+  <img width="152" height="415" alt="image" src="https://github.com/user-attachments/assets/2f99d1d5-41ef-4c9b-8f21-74869ab7c253" />
+</details>
+
+<details>
+  <summary><b>[IMG]</b> And RIGHT HERE, is when the <b>BEEP</b>s began:</summary>
+  <img width="205" height="330" alt="image" src="https://github.com/user-attachments/assets/f2593cad-87ae-4797-ab74-3557ca172955" />
+</details>
+
+<details>
+  <summary><b>[IMG]</b> And it kept going...</summary>
+  <img width="141" height="847" alt="image" src="https://github.com/user-attachments/assets/75cf0b74-99a8-4a30-bf43-ca663250254a" />
+</details>
 
 ## Simple Mobile App Vision
 
