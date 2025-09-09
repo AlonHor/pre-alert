@@ -38,8 +38,10 @@ heatmap: npt.NDArray[np.float64] = np.array([])
 current_planes: npt.NDArray[np.float64] = np.array([])
 close_points = []
 isolated_planes = []
+close_points_sum = 0
 
 def is_isolated(point: npt.NDArray[np.float64], reference_points_np: npt.NDArray[np.float64]):
+    global close_points_sum
     lat1, lon1, alt1 = point
 
     lat2 = reference_points_np[:, 0]
@@ -53,11 +55,12 @@ def is_isolated(point: npt.NDArray[np.float64], reference_points_np: npt.NDArray
     distances = np.sqrt(dlat**2 + dlon**2 + dalt**2)
 
     close_mask = distances <= 2000
-    close_count = np.count_nonzero(close_mask)
+    close_count = min(np.count_nonzero(close_mask), 100)
 
     close_points.extend(reference_points_np[close_mask].tolist())
 
     isolated = close_count < 10
+    close_points_sum += close_count
     print(f"{RED if isolated else GREEN}{close_count} {RESET}", end="")
     return isolated
 
@@ -94,6 +97,7 @@ while True:
 
     close_points = []
     isolated_planes = []
+    close_points_sum = 0
 
     print("Points in 2km radius per plane: ", end="")
 
@@ -105,10 +109,20 @@ while True:
             isolated_planes.append(plane)
             isolated_count += 1
 
-    if isolated_count > 2:
-        threading.Thread(target=lambda: winsound.Beep(1200, 2000), daemon=True).start()
+    plane_count = len(current_planes) + isolated_count
 
-    print(f"{ORANGE if isolated_count == 1 else RED if isolated_count > 0 else GREEN}{isolated_count}{RESET}{GRAY}/{len(current_planes) + isolated_count}{RESET}")
+    print(f"{ORANGE if isolated_count == 1 else RED if isolated_count > 0 else GREEN}{isolated_count}{RESET}{GRAY}/{plane_count}{RESET} A:", end="")
+
+    if plane_count > 0:
+        close_points_avg = int(close_points_sum / plane_count)
+        print(f"{GREEN if close_points_avg > 50 else RED}{close_points_avg}{RESET}")
+        ax.set_title(f"{close_points_avg}/100")
+    else:
+        print(f"{GREEN}N/A{RESET}")
+        ax.set_title("N/A")
+
+    if close_points_avg != 0 and close_points_avg <= 50:
+        threading.Thread(target=lambda: winsound.Beep(1200, 2000), daemon=True).start()
 
     heatmap_lats = heatmap[:, 0]
     heatmap_lons = heatmap[:, 1]
