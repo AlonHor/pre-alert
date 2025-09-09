@@ -40,6 +40,8 @@ close_points = []
 isolated_planes = []
 close_points_sum = 0
 
+int_hm_refresh = 10
+
 def is_isolated(point: npt.NDArray[np.float64], reference_points_np: npt.NDArray[np.float64]):
     global close_points_sum
     lat1, lon1, alt1 = point
@@ -65,10 +67,15 @@ def is_isolated(point: npt.NDArray[np.float64], reference_points_np: npt.NDArray
     return isolated
 
 while True:
-    with open("heatmap.json") as f:
-        try:
-            heatmap = np.array(json.load(f))
-        except: continue
+    if int_hm_refresh < 9:
+        int_hm_refresh += 1
+    else:
+        with open("heatmap.json") as f:
+            try:
+                heatmap = np.array(json.load(f))
+            except: continue
+
+        int_hm_refresh = 0
 
     if heatmap_scatter:
         try:
@@ -111,19 +118,23 @@ while True:
 
     print(f"{ORANGE if isolated_count == 1 else RED if isolated_count > 0 else GREEN}{isolated_count}{RESET}{GRAY}/{plane_count}{RESET} A: ", end="")
 
+    ax_title = ""
     close_points_avg = -1
     if plane_count > 0:
         close_points_avg = int(close_points_sum / plane_count)
         print(f"{GREEN if close_points_avg > 50 else RED}{close_points_avg}{RESET} ", end="")
-        ax.set_title(f"{close_points_avg}/100")
+        ax_title = f"{close_points_avg}/100"
     else:
         print(f"{GREEN}0{RESET} ", end="")
-        ax.set_title("N/A")
+        ax_title = "N/A"
 
     if close_points_avg != -1 and close_points_avg <= 50 and isolated_count > 1:
         threading.Thread(target=lambda: winsound.Beep(1200, 2000), daemon=True).start()
         print(f"{RED}ATTK{RESET}")
-    print()
+        ax_title = "ATTK"
+    else: print()
+
+    ax.set_title(ax_title)
 
     heatmap_lats = heatmap[:, 0]
     heatmap_lons = heatmap[:, 1]
