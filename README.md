@@ -22,7 +22,7 @@ Here's 1 hour of traffic, in a 60x timelapse (GIF may take a while to load):
 ## Working Proof
 While leaving the detection system running on the background in my room, I suddenly started hearing **BEEP**, **BEEP**, **BEEP**, **BEEP**... I rushed to my room to see if it actually detected an oncoming attack, and, well, 2 minutes later, I got a notification on my phone from Home Front Command notifying about an oncoming ballistic missile.
 
-### Here are the logs of the actual event - worth having a look!:
+### Here are the logs of the actual event - worth having a look!
 
 Format is as follows, where pr = path rating, i.e. how "on-path" the plane is (0-100), according to the heatmap: 
 ```
