@@ -122,13 +122,13 @@ while True:
     close_points_avg = -1
     if plane_count > 0:
         close_points_avg = int(close_points_sum / plane_count)
-        print(f"{GREEN if close_points_avg > 50 else RED}{close_points_avg}{RESET} ", end="")
+        print(f"{GREEN if close_points_avg >= 25 else RED}{close_points_avg}{RESET} ", end="")
         ax_title = f"{close_points_avg}/100"
     else:
         print(f"{GREEN}0{RESET} ", end="")
         ax_title = "N/A"
 
-    if close_points_avg != -1 and close_points_avg <= 50 and isolated_count > 1:
+    if close_points_avg != -1 and close_points_avg < 25 and isolated_count > 1:
         threading.Thread(target=lambda: winsound.Beep(1200, 2000), daemon=True).start()
         print(f"{RED}ATTK{RESET}")
         ax_title = "ATTK"
