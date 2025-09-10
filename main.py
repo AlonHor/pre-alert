@@ -107,14 +107,13 @@ while True:
     close_points_sum = 0
 
     isolated_count = 0
+    plane_count = len(current_planes)
     for plane in current_planes:
         if is_isolated(plane, heatmap):
             current_plane_mask = ~(current_planes == plane).all(axis=1)
             current_planes = current_planes[current_plane_mask]
             isolated_planes.append(plane)
             isolated_count += 1
-
-    plane_count = len(current_planes) + isolated_count
 
     print(f"{ORANGE if isolated_count == 1 else RED if isolated_count > 0 else GREEN}{isolated_count}{RESET}{GRAY}/{plane_count}{RESET} A: ", end="")
 
