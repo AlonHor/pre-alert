@@ -4,6 +4,8 @@ Pre-Alert is an advanced early warning system designed to notify users **before*
 
 As of now, the system runs as a Python script, but I'm looking forward to rewriting it in either Rust, C or C++ in the near future!
 
+<img width="256" height="256" alt="Early Warning" src="https://github.com/user-attachments/assets/74859f75-f18e-4719-b441-0ad33bde7c4a" />
+
 ## Concept
 
 When a rocket attack is imminent, aviation authorities enforce strict regulations causing planes in the affected region to change course, land, or hold patterns. These coordinated maneuvers often precede public warning sirens and alerts, especially when we're dealing with a long-range threat such as a ballistic missile.
