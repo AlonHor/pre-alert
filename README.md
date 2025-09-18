@@ -4,7 +4,7 @@ Pre-Alert is an advanced early warning system designed to notify users **before*
 
 As of now, the system runs as a Python script, but I'm looking forward to rewriting it in either Rust, C or C++ in the near future!
 
-<img width="256" height="256" alt="Early Warning" src="https://github.com/user-attachments/assets/74859f75-f18e-4719-b441-0ad33bde7c4a" />
+<img width="256" height="256" alt="" src="https://github.com/user-attachments/assets/74859f75-f18e-4719-b441-0ad33bde7c4a" />
 
 ## Concept
 
@@ -22,47 +22,24 @@ Here's 1 hour of traffic, in a 60x timelapse (GIF may take a while to load):
 ![radar-timelapse](https://github.com/user-attachments/assets/13da5ff2-b598-4685-8fd3-1fb5f8dcb3e6)
 
 ## Working Proof
-While leaving the detection system running on the background in my room, I suddenly started hearing **BEEP**, **BEEP**, **BEEP**, **BEEP**... I rushed to my room to see if it actually detected an oncoming attack, and, well, 2 minutes later, I got a notification on my phone from Home Front Command notifying about an oncoming ballistic missile.
+Well, there's already a prototype app that works, **Altivis**!
 
-### Here are the logs of the actual event - worth having a look!
+<img width="512" alt="" src="https://github.com/user-attachments/assets/48543d73-a7cb-4fc0-a263-2cb474cb45ef" />
 
-Format is as follows, where pr = path rating, i.e. how "on-path" the plane is (0-100), according to the heatmap: 
-```
-<plane 1 pr> <plane 2 pr> <plane 3 pr>(...) <isolated planes>/<total planes> A:<average pr>
-```
+- `20:26` **ALTIVIS** sent out an early warning
+- `20:29` **PIKUD HA'OREF** sent out an early warning
 
-<details>
-  <summary><b>[IMG]</b> Before the attack, everything seemed fine:</summary>
-  <img width="179" height="150" alt="image" src="https://github.com/user-attachments/assets/2d7f30df-fd0a-4f7f-8def-75461d7f00fa" />
-</details>
+That's **3 minutes** before the official warning! The sirens began at `20:32`.
 
-<details>
-  <summary><b>[IMG]</b> Right when the attack began, the system quickly detected the planes beginning their evacuation patterns. Numbers going down are simply planes doing <i>something</i> they don't normally do:</summary>
-  <img width="126" height="372" alt="image" src="https://github.com/user-attachments/assets/450df071-65e3-4df7-9cf2-bb7256938275" />
-</details>
+## Simple Mobile App
 
-<details>
-  <summary><b>[IMG]</b> The numbers kept going down, while another plane joined in, evacuating too:</summary>
-  <img width="152" height="415" alt="image" src="https://github.com/user-attachments/assets/2f99d1d5-41ef-4c9b-8f21-74869ab7c253" />
-</details>
-
-<details>
-  <summary><b>[IMG]</b> And RIGHT HERE, is when the <b>BEEP</b>s began:</summary>
-  <img width="205" height="330" alt="image" src="https://github.com/user-attachments/assets/f2593cad-87ae-4797-ab74-3557ca172955" />
-</details>
-
-<details>
-  <summary><b>[IMG]</b> And it kept going...</summary>
-  <img width="141" height="847" alt="image" src="https://github.com/user-attachments/assets/75cf0b74-99a8-4a30-bf43-ca663250254a" />
-</details>
-
-## Simple Mobile App Vision
-
-Pre-Alert's goal is to offer a **very simple mobile app**:
+Pre-Alert already offers a **very simple mobile app**:
 
 - You install the app and enable notifications.
 - When an attack is detected, you'll receive a notification on your phone.
 - The data processing and detection runs in the cloud, keeping the app lightweight and fully automatic for end users.
+
+I called it "Altivis" (Altitude + Visualization). I'll release the APK very soon!
 
 ## Status
 
@@ -73,7 +50,7 @@ Pre-Alert is **actively working and near completion**. It already performs the f
 - Builds and updates a heatmap (`heatmap.json`) of aircraft movements at regular intervals.
 - Analyzes current aircraft positions (`current.json`) and compares them to historical patterns.
 - Detects and highlights isolated planes, indicating possible regulatory maneuvers.
-- Visualizes data and triggers notifications (including audible alerts) if anomalies are detected.
+- Triggers mobile push notifications in the app, which I will release very soon!
 
 ## Roadmap
 
@@ -82,13 +59,13 @@ Pre-Alert is **actively working and near completion**. It already performs the f
 - [x] Detect and notify about isolated planes and abnormal movement clusters.
 - [x] Visualize aircraft positions and heatmap deviations.
 - [x] Implement audible alerts for detected anomalies.
-- [ ] Create a simple mobile app with push notification support.
-- [ ] Deploy detection backend to a cloud environment.
+- [X] Create a simple mobile app with push notification support.
+- [X] Deploy detection backend to a cloud environment.
 - [ ] Add support for configurable alert rules and thresholds.
 
-## How To Run
+## How To Run Locally
 
-In order to run the backend detection system you must have a program running to populate `current.json` with live aircraft positions. This can be done using official APIs (e.g. "FlightRadar24" or "ADSBx"). Once you do, simply run the python script by running `python main.py`.
+In order to run the backend detection system locally you must have a program running to populate `current.json` with live aircraft positions. This can be done using official APIs (e.g. "FlightRadar24" or "ADSBx"). Once you do, simply run the python script by running `python main.py`.
 
 ## Contributing
 
