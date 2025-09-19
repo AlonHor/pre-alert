@@ -43,7 +43,7 @@ I called it "Altivis" (Altitude + Visualization). I'll release the APK very soon
 
 ## Status
 
-Pre-Alert is **actively working and near completion**. It already performs the following:
+Pre-Alert is a **working, production** project. It already performs the following:
 
 - Fetches and decodes real-time flight data from multiple aircraft types and signal formats.
 - Filters and processes aircraft, extracting position, altitude, flight status, and other relevant metrics.
