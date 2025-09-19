@@ -127,7 +127,7 @@ while True:
         print(f"{GREEN}0{RESET} ", end="")
         ax_title = "N/A"
 
-    if close_points_avg != -1 and close_points_avg < 25 and isolated_count > 1:
+    if close_points_avg != -1 and close_points_avg < 25 and isolated_count > 2:
         threading.Thread(target=lambda: winsound.Beep(1200, 2000), daemon=True).start()
         print(f"{RED}ATTK{RESET}")
         ax_title = "ATTK"
